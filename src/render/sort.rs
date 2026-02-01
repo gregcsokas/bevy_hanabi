@@ -216,7 +216,13 @@ impl SortBindGroups {
             sort_fill_bind_group_layout_descs: default(),
             sort_fill_bind_groups: default(),
             sort_bind_group_layout_desc,
-            sort_bind_group: None, // created once the pipeline and its bind group layouts are created by the pipeline cache
+            // This bind group is created later, once the pipeline and its bind group layouts are
+            // created by the pipeline cache. Technically we could create the bind group layout
+            // immediately because the PipelineCache pretends to but actually creates them
+            // on-the-fly in get_bind_group_layout(), but this is brittle as any behavior change
+            // would break Hanabi. Instead we create this bind group alongside all others, which is
+            // more consistent too.
+            sort_bind_group: None,
             sort_copy_bind_group_layout_desc,
             sort_pipeline_id,
             sort_copy_pipeline_id,
